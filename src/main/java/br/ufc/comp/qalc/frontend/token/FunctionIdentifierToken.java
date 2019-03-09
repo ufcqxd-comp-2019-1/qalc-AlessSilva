@@ -3,7 +3,7 @@ package br.ufc.comp.qalc.frontend.token;
 /**
  * Classe que representa um token do tipo (FUNCID).
  */
-public class FunctionIdentifierToken extends Token {
+public class  FunctionIdentifierToken extends Token {
 
     public FunctionIdentifierToken(long line, long start, String value) throws IllegalArgumentException {
         super(line, start, value);
