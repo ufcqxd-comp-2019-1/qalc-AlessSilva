@@ -82,7 +82,14 @@ public class Scanner {
             lexema.append(source.getCurrentChar());
             source.advance();
 
-            if( Character.isDigit(source.getCurrentChar()) ){ // VariableToken
+            if( source.getCurrentChar() == '?' ){
+
+                lexema.append(source.getCurrentChar());
+                source.advance();
+                String stringValue = lexema.toString();
+                return new ResultIdentifierToken(currentLine,lexemaStart,stringValue);
+
+            }else if( Character.isDigit(source.getCurrentChar()) ){ //  ResultIdentfier Token
 
                 int contZeros = 0;
 
@@ -102,7 +109,7 @@ public class Scanner {
                     return new ResultIdentifierToken(currentLine,lexemaStart,stringValue);
                 }
 
-            }else if( ( source.getCurrentChar() >= 'a' && source.getCurrentChar() <= 'z' ) || ( source.getCurrentChar() >= 'A' && source.getCurrentChar() <= 'Z') ){ // ResultIdentfierToken
+            }else if( ( source.getCurrentChar() >= 'a' && source.getCurrentChar() <= 'z' ) || ( source.getCurrentChar() >= 'A' && source.getCurrentChar() <= 'Z') ){ // VariableToken
 
                 do {
                     lexema.append(source.getCurrentChar());

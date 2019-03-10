@@ -1,14 +1,13 @@
 package br.ufc.comp.qalc;
 
+import br.ufc.comp.qalc.frontend.Scanner;
+import br.ufc.comp.qalc.frontend.Source;
 import br.ufc.comp.qalc.report.MessageCenter;
 import br.ufc.comp.qalc.report.TokensReporter;
 import br.ufc.comp.qalc.report.messages.MessageCategory;
 import picocli.CommandLine;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Classe principal do interpretador.
@@ -133,6 +132,8 @@ public class QALC {
                 if (qalc.stopAt.ordinal() >= InterpreterPass.LEXER.ordinal()) {
                     // Fase de Análise Léxica deve ser executada
                     // TODO Executar análise léxica
+
+
                 }
                 // TODO Verificar e executar demais fases
 
