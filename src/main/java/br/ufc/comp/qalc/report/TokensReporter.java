@@ -7,6 +7,7 @@ import br.ufc.comp.qalc.report.messages.NewTokenMessage;
 import java.io.IOException;
 import java.io.OutputStream;
 
+
 /**
  * Classe especializada no relato de mensagens de reconhecimento de tokens.
  *
@@ -52,16 +53,14 @@ public class TokensReporter extends BasicReporter {
             try {
                 // TODO Alterar para aumentar as informações de acordo com a variável `verbosity`.
                 //      (Ver Javadoc desta função.
+
                 if( verbosity.ordinal() == OutputVerbosity.ESSENTIAL.ordinal() ){
-                    System.out.print("("+((NewTokenMessage) message).getToken().getTokenIdentifier()+")");
                     output.write(String.format("(%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier()));
 
                 }else if( verbosity.ordinal() == OutputVerbosity.ADDITIONAL_INFO.ordinal() ){
-
                     output.write(String.format("(%s,%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier(),((NewTokenMessage) message).getToken().toString()));
 
                 }else if( verbosity.ordinal() == OutputVerbosity.EVERYTHING.ordinal() ){
-
                     output.write(String.format("(%s,%s,L:%s,C:%s-%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier() , ((NewTokenMessage) message).getToken().toString() , ((NewTokenMessage) message).getToken().getLineNumber() , ((NewTokenMessage) message).getToken().getColumnStart() , ((NewTokenMessage) message).getToken().getColumnEnd() ));
 
                 }

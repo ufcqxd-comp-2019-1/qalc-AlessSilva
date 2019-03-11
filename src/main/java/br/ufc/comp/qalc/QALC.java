@@ -1,17 +1,21 @@
 package br.ufc.comp.qalc;
 
-import br.ufc.comp.qalc.frontend.Scanner;
-import br.ufc.comp.qalc.frontend.Source;
-import br.ufc.comp.qalc.frontend.token.Token;
 import br.ufc.comp.qalc.report.MessageCenter;
-import br.ufc.comp.qalc.report.MessageConsumer;
 import br.ufc.comp.qalc.report.TokensReporter;
-import br.ufc.comp.qalc.report.messages.Message;
 import br.ufc.comp.qalc.report.messages.MessageCategory;
-import br.ufc.comp.qalc.report.messages.NewTokenMessage;
 import picocli.CommandLine;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.FileInputStream;
+
+import br.ufc.comp.qalc.frontend.token.*;
+import br.ufc.comp.qalc.frontend.Scanner;
+import br.ufc.comp.qalc.frontend.Source;
+import br.ufc.comp.qalc.report.messages.NewTokenMessage;
 
 /**
  * Classe principal do interpretador.
@@ -106,14 +110,12 @@ public class QALC {
             } else {
                 // Alterar esta porção do código
                 // ---->
-
                 InputStream inputToStream = qalc.readFrom == null ? System.in : new FileInputStream(qalc.readFrom);
                 OutputStream outputToStream = qalc.outputTo == null ? System.out : new FileOutputStream(qalc.outputTo);
 
                 // WARNING: Apenas a última fase deve gerar saída.
                 switch (qalc.stopAt) {
                     case LEXER:
-
                         MessageCenter.registerConsumerFor(
                                 MessageCategory.SCANNING,
                                 new TokensReporter(outputToStream, qalc.outputVerbosity)
@@ -125,15 +127,18 @@ public class QALC {
 
                         while (true){
 
-                        m = new NewTokenMessage(scan.getNextToken());
+                            m = new NewTokenMessage(scan.getNextToken());
 
-                        if (m.getToken() == null){
-                            break;
-                        }
+                            if (m.getToken() instanceof EOFToken){
+                                MessageCenter.deliver(m);
+                                break;
+                            }
 
-                        MessageCenter.deliver(
-                                m
-                        );
+                            if ( m.getToken() instanceof WhiteToken || m.getToken() instanceof ComToken ){
+                                continue;
+                            }else{
+                                MessageCenter.deliver(m);
+                            }
 
                         }
 
@@ -157,7 +162,6 @@ public class QALC {
                 if (qalc.stopAt.ordinal() >= InterpreterPass.LEXER.ordinal()) {
                     // Fase de Análise Léxica deve ser executada
                     // TODO Executar análise léxica
-
                 }
                 // TODO Verificar e executar demais fases
 
@@ -194,6 +198,8 @@ public class QALC {
         } catch (Exception ex) {
             System.err.println("Não foi possível executar a ação solicitada.");
             ex.printStackTrace();
+        } finally {
+            ResourcesManager.shutdown(true);
         }
     }
 }

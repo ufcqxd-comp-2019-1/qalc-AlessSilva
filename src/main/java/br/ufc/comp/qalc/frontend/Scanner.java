@@ -249,9 +249,64 @@ public class Scanner {
 
             return new SemiToken(currentLine,lexemaStart,lexema.toString());
 
+        }else if( Character.isWhitespace(source.getCurrentChar()) ){
+
+            long currentLine = source.getCurrentLine();
+            long lexemaStart = source.getCurrentColumn();
+            StringBuilder lexema = new StringBuilder();
+
+            do{
+
+                lexema.append(source.getCurrentChar());
+                source.advance();
+
+            }
+            while( Character.isWhitespace(source.getCurrentChar()) );
+
+            return new WhiteToken(currentLine,lexemaStart,lexema.toString());
+
+        }else if( source.getCurrentChar() == '#' ){
+
+            long currentLine = source.getCurrentLine();
+            long lexemaStart = source.getCurrentColumn();
+            StringBuilder lexema = new StringBuilder();
+
+            do{
+
+               lexema.append(source.getCurrentChar());
+               source.advance();
+
+            }while ( source.getCurrentChar() != '\n' && source.getCurrentChar() != '\r' );
+
+            return new ComToken( currentLine,lexemaStart,lexema.toString() );
+
         }
 
         // TODO Recuperação de erros.
+
+        else{
+
+            long currentLine = source.getCurrentLine();
+            long lexemaStart = source.getCurrentColumn();
+            StringBuilder lexema = new StringBuilder();
+
+            do{
+
+                lexema.append(source.getCurrentChar());
+                source.advance();
+
+            }while ( source.getCurrentChar() != '$' && source.getCurrentChar() != '@'
+                    && source.getCurrentChar() != '+' && source.getCurrentChar() != '-'
+                    && source.getCurrentChar() != '*' && source.getCurrentChar() != '/'
+                    && source.getCurrentChar() != '(' && source.getCurrentChar() != ')'
+                    && source.getCurrentChar() != '#' && source.getCurrentChar() != '%'
+                    && source.getCurrentChar() != '^' && source.getCurrentChar() != ','
+                    && source.getCurrentChar() != ';' && source.getCurrentChar() != '='
+                    && !Character.isDigit(source.getCurrentChar()) && !Character.isWhitespace(source.getCurrentChar()));
+
+            return new ErrorToken(currentLine,lexemaStart,lexema.toString());
+
+        }
 
         return null;
     }
