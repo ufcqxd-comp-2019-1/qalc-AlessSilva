@@ -51,19 +51,18 @@ public class TokensReporter extends BasicReporter {
         if (message instanceof NewTokenMessage) {
             try {
                 // TODO Alterar para aumentar as informações de acordo com a variável `verbosity`.
-                //      (Ver Javadoc desta função.)
-
+                //      (Ver Javadoc desta função.
                 if( verbosity.ordinal() == OutputVerbosity.ESSENTIAL.ordinal() ){
-
+                    System.out.print("("+((NewTokenMessage) message).getToken().getTokenIdentifier()+")");
                     output.write(String.format("(%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier()));
 
                 }else if( verbosity.ordinal() == OutputVerbosity.ADDITIONAL_INFO.ordinal() ){
 
-                    output.write(String.format("(%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier()) + "," + ((NewTokenMessage) message).getToken().toString() );
+                    output.write(String.format("(%s,%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier(),((NewTokenMessage) message).getToken().toString()));
 
                 }else if( verbosity.ordinal() == OutputVerbosity.EVERYTHING.ordinal() ){
 
-                    output.write(String.format("(%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier()) + "," + ((NewTokenMessage) message).getToken().toString() + ",L:" + ((NewTokenMessage) message).getToken().getLineNumber() + ",C:" + ((NewTokenMessage) message).getToken().getColumnStart() +  "-" +((NewTokenMessage) message).getToken().getColumnEnd()  );
+                    output.write(String.format("(%s,%s,L:%s,C:%s-%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier() , ((NewTokenMessage) message).getToken().toString() , ((NewTokenMessage) message).getToken().getLineNumber() , ((NewTokenMessage) message).getToken().getColumnStart() , ((NewTokenMessage) message).getToken().getColumnEnd() ));
 
                 }
 
